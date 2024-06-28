@@ -1,1 +1,1 @@
-Backend Assets HerHackathon2024 Ing Challenge Project
+Assets HerHackathon2024 Ing Challenge Project
