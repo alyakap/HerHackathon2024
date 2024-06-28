@@ -1,2 +1,5 @@
-Assets HerHackathon2024 Ing Challenge Project
--contains some documents related to project like images, pdf, flow-charts etc
+### Assets
+
+- Icons and Logos: Visual elements used in the UI.
+- Backgrounds: Image files used for the background of web pages or sections.
+- flow charts pdfs etc
