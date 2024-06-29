@@ -63,7 +63,11 @@ function Profile() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/users/1")
+      .get("http://localhost:8080/users/1", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         console.log(response.data);
         setUserData(response.data);
