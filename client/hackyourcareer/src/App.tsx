@@ -1,18 +1,35 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, {useState} from "react";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import SigninSide from "./Components/signin/SignInSide";
+import CareerTest from "./Components/test/CareerTest";
+import TestResults from "./results/TestResults";
+import MatchedMentors from "./Components/matched/MatchedMentors";
+import MentorDetail from "./Components/mentor/MentorDetail";
+import LandingPage from "./Components/landing/LandingPage";
+import ResultItem from "./results/ResultsItem";
 
 function App() {
-  return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/signin" element={<SigninSide />} />
-          {/* Add more routes if necessary */}
-        </Routes>
-      </div>
-    </Router>
-  );
+    const [quizResults, setQuizResults] = useState([] as ResultItem[]);
+
+    const handleQuizCompletion = (results: ResultItem[]) => {
+        setQuizResults(results);
+    };
+
+    return (
+        <Router>
+            <div className="App">
+                <Routes>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/signin" element={<SigninSide/>}/>
+                    <Route path="/test" element={<CareerTest onCompletion={handleQuizCompletion} />}/>
+                    <Route path="/results" element={<TestResults results={quizResults} />} />
+                    <Route path="/mentors/:trajectory" element={<MatchedMentors/>}/>
+                    <Route path="/mentor/:name" element={<MentorDetail/>}/>
+                    <Route path="*" element={<div>404 Not Found</div>}/>
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
