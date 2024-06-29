@@ -1,12 +1,16 @@
-FROM node:20-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
-COPY client/hackyourcareer/package*.json ./
+
+RUN npm config set registry https://registry.npmjs.org/
+
+COPY package.json /app/
 
 RUN npm install
 
-COPY client/hackyourcareer/src ./
+COPY public /app/public
+COPY src /app/src
 
 RUN npm run build
 
