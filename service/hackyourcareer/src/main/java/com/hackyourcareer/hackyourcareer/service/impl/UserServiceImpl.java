@@ -3,7 +3,6 @@ package com.hackyourcareer.hackyourcareer.service.impl;
 import com.hackyourcareer.hackyourcareer.model.User;
 import com.hackyourcareer.hackyourcareer.repository.UserRepository;
 import com.hackyourcareer.hackyourcareer.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        return repository.getReferenceById(id);
+        Optional<User> user = repository.findById(id);
+        return user.orElse(new User());
     }
 
     @Override
