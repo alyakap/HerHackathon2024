@@ -155,25 +155,44 @@ VALUES
 ('J019','Machine Learning Engineer'),
 ('J020','Full Stack Developer'),
 ('J021','AI Specialist'),
-('J022','Project Manager');
+('J022','Project Manager'),
+('J023','University Graduate');
 
-INSERT INTO careerpaths (id, jobtitle_id, start_date, end_date, rating, company)
-VALUES ('CP001', 'J003', '2022-01-01', '2023-01-01', 5, 'TechCorp');
+INSERT INTO languages (id, name)
+VALUES
+('L001','English'),
+('L002','German'),
+('L003','French');
 
-INSERT INTO users (id, username, email, firstname, lastname, age, gender, is_mentor, is_mentee, jobtitle_id, personality_id, career_path_id)
-VALUES ('1', 'mentor1', 'email', '', '', 43, 'FEMALE', true, false, 'J003', 'ESTP', 'CP001');
+INSERT INTO users (id, username, email, firstname, lastname, age, gender, is_mentor, is_mentee, jobtitle_id, personality_id, location, avatar_url)
+VALUES ('1', 'mentee1', 'email@email.com', 'Anna', 'Melson', 33, 'FEMALE', false, true, 'J022', 'ESTP', 'USA', 'https://www.physics.wisc.edu/wp-content/uploads/2021/12/Mae-Saul-profile-400x400.jpg');
 
-INSERT INTO users (id, username)
-VALUES ('2', 'mentee1');
+INSERT INTO careerpaths (id, jobtitle_id, start_date, end_date, rating, company, user_id)
+VALUES ('CP001', 'J023', '2019-10-01', '2024-05-01', 5, 'MIT', '1');
 
-INSERT INTO users (id, username)
-VALUES ('3', 'mentee2');
+INSERT INTO users (id, username, email, firstname, lastname, age, gender, is_mentor, is_mentee, jobtitle_id, personality_id, location, avatar_url)
+VALUES ('2', 'mentor1', 'email@email.com', 'Ada', 'Lovelace', 43, 'FEMALE', true, false, 'J002', 'ENFJ', 'Frankfurt, Germany', 'https://earthlab.colorado.edu/sites/default/files/media/image/Ada_Lovelace_Chalon_portrait.jpg');
+
+INSERT INTO careerpaths (id, jobtitle_id, start_date, end_date, rating, company, user_id)
+VALUES ('CP002', 'J002', '2018-09-01', '2024-07-01', 5, 'Wonderful technologies', '2');
+
+INSERT INTO careerpaths (id, jobtitle_id, start_date, end_date, rating, company, user_id)
+VALUES ('CP003', 'J007', '2008-01-01', '2018-08-01', 5, 'Wow', '2');
+
+INSERT INTO users (id, username, email, firstname, lastname, age, gender, is_mentor, is_mentee, jobtitle_id, personality_id, location, avatar_url)
+VALUES ('3', 'mentor2', 'email@email.com', 'Hedy', 'Lamarr', 33, 'FEMALE', true, false, 'J002', 'ESTP', 'Frankfurt, Germany', 'https://www.physics.wisc.edu/wp-content/uploads/2021/12/Mae-Saul-profile-400x400.jpg');
+
+INSERT INTO careerpaths (id, jobtitle_id, start_date, end_date, rating, company, user_id)
+VALUES ('CP004', 'J002', '2018-09-01', '2024-07-01', 5, 'Wonderful technologies', '3');
+
+INSERT INTO careerpaths (id, jobtitle_id, start_date, end_date, rating, company, user_id)
+VALUES ('CP005', 'J007', '2008-01-01', '2018-08-01', 5, 'Wow', '3');
 
 INSERT INTO mentors_mentees (mentor_id, mentee_id)
-VALUES ('1', '2');
+VALUES ('2', '1');
 
 INSERT INTO mentors_mentees (mentor_id, mentee_id)
-VALUES ('1', '3');
+VALUES ('3', '1');
 
 INSERT INTO users_preferences (user_id, preference_id)
 VALUES ('1', 'P013'),
@@ -190,3 +209,7 @@ VALUES ('1', 'S011'),
 ('1', 'S013'),
 ('1', 'S016');
 
+INSERT INTO users_languages (user_id, language_id)
+VALUES ('1', 'L001'),
+('1', 'L002'),
+('1', 'L003');
