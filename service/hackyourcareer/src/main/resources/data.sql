@@ -165,13 +165,13 @@ VALUES
 ('L003','French');
 
 INSERT INTO users (id, username, email, firstname, lastname, age, gender, is_mentor, is_mentee, jobtitle_id, personality_id, location, avatar_url)
-VALUES ('1', 'mentee1', 'email@email.com', 'Anna', 'Melson', 33, 'FEMALE', false, true, 'J022', 'ESTP', 'USA', 'https://earthlab.colorado.edu/sites/default/files/media/image/Ada_Lovelace_Chalon_portrait.jpg');
+VALUES ('1', 'mentee1', 'email@email.com', 'Anna', 'Melson', 33, 'FEMALE', false, true, 'J022', 'ESTP', 'USA', 'https://www.physics.wisc.edu/wp-content/uploads/2021/12/Mae-Saul-profile-400x400.jpg');
 
 INSERT INTO careerpaths (id, jobtitle_id, start_date, end_date, rating, company, user_id)
 VALUES ('CP001', 'J023', '2019-10-01', '2024-05-01', 5, 'MIT', '1');
 
 INSERT INTO users (id, username, email, firstname, lastname, age, gender, is_mentor, is_mentee, jobtitle_id, personality_id, location, avatar_url)
-VALUES ('2', 'mentor1', 'email@email.com', 'Ada', 'Lovelace', 43, 'FEMALE', true, false, 'J002', 'ENFJ', 'Frankfurt, Germany', 'https://mim.p7s1.io/pis/ld/c97ezChLCVyZ-c1vEwXZAanB-DJ78rnq2V2gRWTHzVV6NywNWMSJCEGmZ4YSENP-WRL0b9lo2z_IfR_W_NB3xHAXlZaTzYAhOvOGK9Bc53VQ3BsxRJ3t03eXpLyoTK22rB5pwWWZr68/profile:original?rect=224%2C0%2C576%2C576&w=400');
+VALUES ('2', 'mentor1', 'email@email.com', 'Ada', 'Lovelace', 43, 'FEMALE', true, false, 'J002', 'ENFJ', 'Frankfurt, Germany', 'https://earthlab.colorado.edu/sites/default/files/media/image/Ada_Lovelace_Chalon_portrait.jpg');
 
 INSERT INTO careerpaths (id, jobtitle_id, start_date, end_date, rating, company, user_id)
 VALUES ('CP002', 'J002', '2018-09-01', '2024-07-01', 5, 'Wonderful technologies', '2');
@@ -213,4 +213,3 @@ INSERT INTO users_languages (user_id, language_id)
 VALUES ('1', 'L001'),
 ('1', 'L002'),
 ('1', 'L003');
-
