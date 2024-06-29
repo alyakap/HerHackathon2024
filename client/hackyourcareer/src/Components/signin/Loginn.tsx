@@ -68,15 +68,15 @@ export default function Login() {
             flexDirection: "column",
             alignItems: "center",
             backgroundColor: "rgba(255, 255, 255, 1)",
-            borderRadius: 8,
-            p: 2,
+            borderRadius: 4,
+            p: 5,
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "#F8AFAF" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Log In
+            Login
           </Typography>
           <Box
             component="form"
@@ -85,7 +85,7 @@ export default function Login() {
             sx={{ mt: 3 }}
             px={5}
           >
-            <Grid item xs={12} py={3}>
+            <Grid item xs={12} pb={3}>
               <TextField
                 required
                 fullWidth
@@ -111,9 +111,9 @@ export default function Login() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, backgroundColor: "#5799FF" }}
             >
-              Log in
+              Login
             </Button>
             <Grid container justifyContent="flex-end"></Grid>
           </Box>

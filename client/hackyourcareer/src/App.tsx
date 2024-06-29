@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./Components/signin/Login";
+
 import CareerTest from "./Components/test/CareerTest";
 import TestResults from "./results/TestResults";
 import MatchedMentors from "./Components/matched/MatchedMentors";
@@ -8,6 +8,7 @@ import MentorDetail from "./Components/mentor/MentorDetail";
 import LandingPage from "./Components/landing/LandingPage";
 import ResultItem from "./results/ResultsItem";
 import MenteeSignup from "./Components/form/MenteeSignup";
+import Login from "./Components/signin/Loginn";
 
 function App() {
   const [quizResults, setQuizResults] = useState([] as ResultItem[]);
@@ -21,7 +22,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/Login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<MenteeSignup />} />
           <Route
             path="/test"

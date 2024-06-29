@@ -60,7 +60,7 @@ export default function MenteeSignup() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="sm">
         <CssBaseline />
         <Box
           sx={{
@@ -69,8 +69,8 @@ export default function MenteeSignup() {
             flexDirection: "column",
             alignItems: "center",
             backgroundColor: "rgba(255, 255, 255, 1)",
-            borderRadius: 8,
-            p: 2,
+            borderRadius: 4,
+            p: 5,
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "#F8AFAF" }}>
@@ -160,7 +160,7 @@ export default function MenteeSignup() {
                   variant="contained"
                   component="label"
                   fullWidth
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 2, backgroundColor: "#5799FF" }}
                 >
                   Upload CV
                   <input
@@ -177,7 +177,7 @@ export default function MenteeSignup() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, backgroundColor: "#5799FF" }}
             >
               Sign Up
             </Button>
