@@ -53,7 +53,7 @@ function Profile() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/users/2")
+      .get("http://localhost:8080/users/1")
       .then((response) => {
         console.log(response.data);
         setUserData(response.data);
