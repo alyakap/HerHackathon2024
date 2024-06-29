@@ -4,41 +4,6 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./ProfileStyles.css";
 import axios from "axios";
 
-type Preference = {
-  id: string;
-  name: string;
-};
-
-type Skill = {
-  id: string;
-  name: string;
-};
-
-type Interest = {
-  id: string;
-  name: string;
-};
-
-type JobTitle = {
-  id: string;
-  name: string;
-};
-
-type Personality = {
-  id: string;
-  name: string;
-  description: string;
-};
-
-type CareerPath = {
-  id: string;
-  jobTitle: JobTitle;
-  startDate: string;
-  endDate: string;
-  rating: number;
-  company: string;
-};
-
 type UserData = {
   id: string;
   username: string;
@@ -48,13 +13,57 @@ type UserData = {
   age: number;
   gender: "FEMALE" | "MALE";
   isMentor: boolean;
+  avatarUrl: string;
+  location: string;
   isMentee: boolean;
-  preferencesSet: Preference[];
-  skillsSet: Skill[];
-  interestsSet: Interest[];
-  jobtitle: JobTitle;
-  personality: Personality;
-  careerPath: CareerPath;
+  preferencesSet: {
+    id: string;
+    name: string;
+  }[];
+  skillsSet: {
+    id: string;
+    name: string;
+  }[];
+  interestsSet: {
+    id: string;
+    name: string;
+  }[];
+  jobtitle: {
+    id: string;
+    name: string;
+  };
+  personality: {
+    id: string;
+    name: string;
+    description: string;
+  };
+  careerPaths: {
+    id: string;
+    jobTitle: {
+      id: string;
+      name: string;
+    };
+    startDate: string;
+    endDate: string;
+    rating: number;
+    company: string;
+  }[];
+  mentorsSet: {
+    username: string;
+    firstname: string;
+    lastname: string;
+    location: string;
+    avatarUrl: string;
+    gender: "FEMALE" | "MALE";
+    jobtitle: {
+      id: string;
+      name: string;
+    };
+    languagesList: {
+      id: string;
+      name: string;
+    }[];
+  }[];
 };
 
 function Profile() {
@@ -81,7 +90,7 @@ function Profile() {
 
   return (
     <>
-      <nav className="navbar " style={{ background: "#5799FF" }}>
+      <nav className="navbar" style={{ background: "#5799FF" }}>
         <a
           className="navbar-brand mx-4 text-white font-weight-800"
           style={{ fontWeight: "bold" }}
@@ -89,7 +98,6 @@ function Profile() {
         >
           HackYourCareer
         </a>
-
         <i className="fa-solid fa-user text-white mx-4"></i>
       </nav>
 
@@ -102,7 +110,7 @@ function Profile() {
                   <div className="col-md-4">
                     <div className="text-center border-end">
                       <img
-                        src="./avatar.jpg"
+                        src={userData?.avatarUrl}
                         className="img-fluid avatar-xxl rounded-circle"
                         alt=""
                       />
@@ -112,10 +120,10 @@ function Profile() {
                     <div className="ms-3">
                       <div>
                         <h3 className="card-title mb-2">
-                          {userData.firstname} {userData.lastname}
+                          {userData?.firstname} {userData?.lastname}
                         </h3>
                         <p className="mb-0 text-muted">
-                          {userData.jobtitle?.name}
+                          {userData?.jobtitle?.name}
                         </p>
                       </div>
                     </div>
@@ -168,7 +176,7 @@ function Profile() {
                     <span className="d-block d-sm-none">
                       <i className="mdi mdi-account-group-outline"></i>
                     </span>
-                    <span className="d-none d-sm-block">My Mentor</span>
+                    <span className="d-none d-sm-block">Mentor</span>
                   </a>
                 </li>
               </ul>
@@ -181,21 +189,22 @@ function Profile() {
                     <div className="row">
                       <h5>Experience</h5>
                       <ul>
-                        <li>
-                          <strong>{userData.careerPath?.jobTitle?.name}</strong>{" "}
-                          at {userData.careerPath?.company}
-                          <br />
-                          <em>
-                            {userData.careerPath?.startDate} -{" "}
-                            {userData.careerPath?.endDate}
-                          </em>
-                          <p>Rating: {userData.careerPath?.rating}</p>
-                        </li>
+                        {userData?.careerPaths?.map((path) => (
+                          <li key={path.id}>
+                            <strong>{path.jobTitle.name}</strong> at{" "}
+                            {path.company}
+                            <br />
+                            <em>
+                              {path.startDate} - {path.endDate}
+                            </em>
+                            <p>Rating: {path.rating}</p>
+                          </li>
+                        ))}
                       </ul>
 
                       <h5>Preferences</h5>
                       <ul>
-                        {userData.preferencesSet?.map((preference) => (
+                        {userData?.preferencesSet?.map((preference) => (
                           <li key={preference.id}>
                             <strong>{preference.name}</strong>
                           </li>
@@ -207,13 +216,55 @@ function Profile() {
                 {activeTab === "career" && (
                   <div className="tab-pane active show" role="tabpanel">
                     <h4 className="card-title mb-4">My Career</h4>
-                    <div className="row">{/* Your career cards go here */}</div>
+                    <div className="row"></div>
                   </div>
                 )}
                 {activeTab === "mentor" && (
                   <div className="tab-pane active show" role="tabpanel">
-                    <h4 className="card-title mb-4">My Mentor</h4>
-                    <div className="row">{/* Your mentor cards go here */}</div>
+                    <h4 className="card-title mb-4">Mentor Suggestions</h4>
+                    <div className="row">
+                      <button type="button" className="btn btn-primary mb-4">
+                        <i className="fa-solid fa-user text-white mx-4"></i>
+                        &nbsp;Search
+                      </button>
+                      {userData?.mentorsSet?.map((mentor) => (
+                        <div className="card" key={mentor.username}>
+                          <div className="card-body pb-4">
+                            <div className="row align-items-center">
+                              <div className="col-md-2">
+                                <div className="text-center border-end">
+                                  <img
+                                    src={mentor.avatarUrl}
+                                    className="img-fluid rounded-circle"
+                                    alt=""
+                                    style={{ width: "80px" }}
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-9">
+                                <div className="ms-3">
+                                  <div>
+                                    <h4 className="card-title mb-2">
+                                      {mentor.firstname} {mentor.lastname}
+                                    </h4>
+                                    <p className="mb-0 text-muted">
+                                      {mentor.jobtitle.name}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-md-1">
+                                <div className="ms-3">
+                                  <div>
+                                    <i className="fa-solid fa-chevron-right"></i>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -230,7 +281,7 @@ function Profile() {
                       <tbody>
                         <tr>
                           <th scope="row">Location</th>
-                          <td>Frankfurt, Germany</td>
+                          <td>{userData?.location}</td>
                         </tr>
                         <tr>
                           <th scope="row">Tel</th>
@@ -247,7 +298,7 @@ function Profile() {
                 <div className="pt-2">
                   <h4 className="card-title mb-4">My Skills</h4>
                   <div className="d-flex gap-2 flex-wrap">
-                    {userData.skillsSet?.map((skill) => (
+                    {userData?.skillsSet?.map((skill) => (
                       <span
                         key={skill.id}
                         className="badge badge-soft-secondary p-2"
@@ -265,7 +316,7 @@ function Profile() {
                   <h4 className="card-title mb-4">Interests</h4>
                   <div className="table-responsive">
                     <p>
-                      {userData.interestsSet
+                      {userData?.interestsSet
                         ?.map((interest) => interest.name)
                         .join(", ")}
                     </p>
@@ -273,14 +324,14 @@ function Profile() {
                 </div>
               </div>
             </div>
-            <div className="card border-info">
+            <div className="card ">
               <div className="card-body">
                 <div>
                   <h4 className="card-title mb-4">Personality</h4>
                   <div className="table-responsive">
                     <p>
-                      <strong>{userData.personality?.name}:</strong>{" "}
-                      {userData.personality?.description}
+                      <strong>{userData?.personality?.name}:</strong>{" "}
+                      {userData?.personality?.description}
                     </p>
                   </div>
                 </div>
