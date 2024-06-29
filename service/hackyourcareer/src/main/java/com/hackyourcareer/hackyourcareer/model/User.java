@@ -1,5 +1,6 @@
 package com.hackyourcareer.hackyourcareer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hackyourcareer.hackyourcareer.model.enums.Gender;
 import jakarta.persistence.*;
@@ -11,8 +12,6 @@ import java.util.*;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
 @NoArgsConstructor
 public class User {
     @Id
@@ -85,7 +84,8 @@ public class User {
             inverseJoinColumns =
                     @JoinColumn(name = "mentee_id")
     )
-    @JsonIgnoreProperties({"id", "mentorsSet", "menteesSet", "email", "preferencesSet", "skillsSet", "interestsSet", "personality", "careerPaths", "isMentor", "isMentee", "age"})
+    @JsonIgnore
+//    @JsonIgnoreProperties({"id", "mentorsSet", "menteesSet", "email", "preferencesSet", "skillsSet", "interestsSet", "personality", "careerPaths", "isMentor", "isMentee", "age"})
     private Set<User> menteesSet = new HashSet<>();
 
     @ManyToMany(mappedBy = "menteesSet")
@@ -103,6 +103,7 @@ public class User {
     private Personality personality;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({ "id"})
     private Set<CareerPath> careerPaths = new HashSet<>();
 
     @ManyToMany
@@ -125,5 +126,157 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, username);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Boolean getMentor() {
+        return isMentor;
+    }
+
+    public void setMentor(Boolean mentor) {
+        isMentor = mentor;
+    }
+
+    public Boolean getMentee() {
+        return isMentee;
+    }
+
+    public void setMentee(Boolean mentee) {
+        isMentee = mentee;
+    }
+
+    public Set<Preference> getPreferencesSet() {
+        return preferencesSet;
+    }
+
+    public void setPreferencesSet(Set<Preference> preferencesSet) {
+        this.preferencesSet = preferencesSet;
+    }
+
+    public Set<Skill> getSkillsSet() {
+        return skillsSet;
+    }
+
+    public void setSkillsSet(Set<Skill> skillsSet) {
+        this.skillsSet = skillsSet;
+    }
+
+    public Set<Interest> getInterestsSet() {
+        return interestsSet;
+    }
+
+    public void setInterestsSet(Set<Interest> interestsSet) {
+        this.interestsSet = interestsSet;
+    }
+
+    public Set<User> getMenteesSet() {
+        return menteesSet;
+    }
+
+    public void setMenteesSet(Set<User> menteesSet) {
+        this.menteesSet = menteesSet;
+    }
+
+    public Set<User> getMentorsSet() {
+        return mentorsSet;
+    }
+
+    public void setMentorsSet(Set<User> mentorsSet) {
+        this.mentorsSet = mentorsSet;
+    }
+
+    public JobTitle getJobtitle() {
+        return jobtitle;
+    }
+
+    public void setJobtitle(JobTitle jobtitle) {
+        this.jobtitle = jobtitle;
+    }
+
+    public Personality getPersonality() {
+        return personality;
+    }
+
+    public void setPersonality(Personality personality) {
+        this.personality = personality;
+    }
+
+    public Set<CareerPath> getCareerPaths() {
+        return careerPaths;
+    }
+
+    public void setCareerPaths(Set<CareerPath> careerPaths) {
+        this.careerPaths = careerPaths;
+    }
+
+    public Set<Language> getLanguagesList() {
+        return languagesList;
+    }
+
+    public void setLanguagesList(Set<Language> languagesList) {
+        this.languagesList = languagesList;
     }
 }
