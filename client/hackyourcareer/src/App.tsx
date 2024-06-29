@@ -7,6 +7,7 @@ import MatchedMentors from "./Components/matched/MatchedMentors";
 import MentorDetail from "./Components/mentor/MentorDetail";
 import LandingPage from "./Components/landing/LandingPage";
 import ResultItem from "./results/ResultsItem";
+import MenteeSignup from "./Components/form/MenteeSignup";
 
 function App() {
     const [quizResults, setQuizResults] = useState([] as ResultItem[]);
@@ -19,10 +20,11 @@ function App() {
         <Router>
             <div className="App">
                 <Routes>
-                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/" element={<LandingPage/>}/>
                     <Route path="/signin" element={<SigninSide/>}/>
-                    <Route path="/test" element={<CareerTest onCompletion={handleQuizCompletion} />}/>
-                    <Route path="/results" element={<TestResults results={quizResults} />} />
+                    <Route path="/signup" element={<MenteeSignup/>}/>
+                    <Route path="/test" element={<CareerTest onCompletion={handleQuizCompletion}/>}/>
+                    <Route path="/results" element={<TestResults results={quizResults}/>}/>
                     <Route path="/mentors/:trajectory" element={<MatchedMentors/>}/>
                     <Route path="/mentor/:name" element={<MentorDetail/>}/>
                     <Route path="*" element={<div>404 Not Found</div>}/>
@@ -31,5 +33,6 @@ function App() {
         </Router>
     );
 }
+
 
 export default App;

@@ -54,17 +54,40 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage:
-              'url("/static/images/templates/templates-images/sign-in-side-bg.png")',
-
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: "cover",
-            backgroundPosition: "left",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center", // Centers the content vertically within the column
+            alignItems: "flex-start", // Aligns content to the left
+            p: 4, // Adds padding around the content
+            backgroundColor: "#dae4f0", // Sets the background color
           }}
-        />
+        >
+          <Box
+            sx={{
+              width: "100%", // Ensures the box uses the full width available
+              maxWidth: 900, // Limits the maximum width of the image and text
+              textAlign: "left", // Aligns the text to the left
+            }}
+          >
+            <img
+              src="/signinLeft.jpg" // Path to your image file
+              alt=""
+              style={{ width: "80%", height: "auto" }} // Makes image responsive
+            />
+            <Typography
+              variant="h4"
+              sx={{ mt: 2, color: "#333", fontWeight: "bold", ml: 6 }}
+            >
+              Mentoring Made Easy
+            </Typography>
+            <Typography variant="h6" sx={{ mt: 1, color: "#333", ml: 6 }}>
+              Finding the right mentor shouldn't be hard. Our platform matches
+              you with mentors who can help you excel and achieve your career
+              goals with ease.
+            </Typography>
+          </Box>
+        </Grid>
+
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
             sx={{
