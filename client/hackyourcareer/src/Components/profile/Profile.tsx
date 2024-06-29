@@ -1,10 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./ProfileStyles.css";
+import axios from "axios";
 
 function Profile() {
   const [activeTab, setActiveTab] = useState("profile");
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/users/2")
+      .then((response) => {
+        console.log(response.data);
+        setUserData(response.data);
+      })
+      .catch((error) => console.error("Error fetching user data:", error));
+  }, []);
 
   return (
     <>
