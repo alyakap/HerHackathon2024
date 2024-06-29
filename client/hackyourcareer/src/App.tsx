@@ -9,6 +9,7 @@ import LandingPage from "./Components/landing/LandingPage";
 import ResultItem from "./results/ResultsItem";
 import MenteeSignup from "./Components/form/MenteeSignup";
 import Login from "./Components/signin/Loginn";
+import Profile from "./Components/profile/Profile";
 
 function App() {
   const [quizResults, setQuizResults] = useState([] as ResultItem[]);
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<MenteeSignup />} />
+          <Route path="/profile" element={<Profile />} />
           <Route
             path="/test"
             element={<CareerTest onCompletion={handleQuizCompletion} />}
