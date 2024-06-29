@@ -13,9 +13,8 @@ import lombok.Setter;
 public class Skill {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Long id;
+    String id;
 
     @Column(name = "name")
     String name;

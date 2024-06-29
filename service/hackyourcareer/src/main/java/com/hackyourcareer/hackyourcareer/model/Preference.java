@@ -12,9 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Preference {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Long id;
+    String id;
 
     @Column(name = "name")
     String name;

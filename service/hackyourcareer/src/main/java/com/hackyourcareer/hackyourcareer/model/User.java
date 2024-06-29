@@ -1,16 +1,16 @@
 package com.hackyourcareer.hackyourcareer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hackyourcareer.hackyourcareer.model.enums.Gender;
-//import com.hackyourcareer.hackyourcareer.model.enums.Personality;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-import java.util.prefs.Preferences;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "users")
@@ -19,56 +19,99 @@ import static jakarta.persistence.CascadeType.ALL;
 @NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Long id;
+    private String id;
 
     @Column(name = "username")
-    String username;
+    private String username;
 
     @Column(name = "email")
-    String email;
+    private String email;
 
     @Column(name = "firstname")
-    String firstname;
+    private String firstname;
 
     @Column(name = "lastname")
-    String lastname;
+    private String lastname;
 
     @Column(name = "age")
-    Integer age;
+    private Integer age;
 
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
-    Gender gender;
+    private Gender gender;
 
-    @Column(name = "preferences")
-    @OneToMany(targetEntity=Preference.class, cascade=ALL, mappedBy="id", fetch=FetchType.LAZY)
-    Set<Preference> preferencesSet;
+    @Column(name = "is_mentor")
+    private Boolean isMentor;
 
-    @Column(name = "skills")
-    @OneToMany(targetEntity=Skill.class, cascade=ALL, mappedBy="id", fetch=FetchType.LAZY)
-    Set<Skill> skillsSet;
+    @Column(name = "is_mentee")
+    private Boolean isMentee;
 
-    @Column(name = "interests")
-    @OneToMany(targetEntity=Interest.class, cascade=ALL, mappedBy="id", fetch=FetchType.LAZY)
-    Set<Interest> interestsSet;
+    @ManyToMany
+    @JoinTable(
+            name = "users_preferences",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "preference_id")
+    )
+    @JsonIgnoreProperties("users")
+    private Set<Preference> preferencesSet  = new HashSet<>();;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "mentor_id", referencedColumnName = "id")
-    User mentor;
+    @ManyToMany
+    @JoinTable(
+            name = "users_skills",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    @JsonIgnoreProperties("users")
+    private Set<Skill> skillsSet  = new HashSet<>();;
 
-    @OneToMany
-    Set<User> menteeSet;
+    @ManyToMany
+    @JoinTable(
+            name = "users_interests",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "interest_id")
+    )
+    @JsonIgnoreProperties("users")
+    private Set<Interest> interestsSet = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "mentors_mentees",
+            joinColumns =
+                    @JoinColumn(name = "mentor_id"),
+            inverseJoinColumns =
+                    @JoinColumn(name = "mentee_id")
+    )
+    @JsonIgnore
+    private Set<User> menteesSet = new HashSet<>();
+
+    @ManyToMany(mappedBy = "menteesSet")
+    @JsonIgnore
+    private Set<User> mentorsSet;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "jobtitle_id", referencedColumnName = "id")
-    JobTitle jobtitle;
+    private JobTitle jobtitle;
 
-//    @Column(name = "personality")
-//    Personality personality;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "personality_id", referencedColumnName = "id")
+    private Personality personality;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "careerPath_id", referencedColumnName = "id")
-    CareerPath careerPath;
+    @JsonIgnoreProperties("users")
+    private CareerPath careerPath;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
+    }
 }

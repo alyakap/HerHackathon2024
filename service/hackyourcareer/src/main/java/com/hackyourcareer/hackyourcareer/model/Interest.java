@@ -13,10 +13,9 @@ import lombok.Setter;
 public class Interest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Long id;
+    private String id;
 
     @Column(name = "name")
-    String name;
+    private String name;
 }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "careerpaths")
 @Getter
@@ -13,14 +15,22 @@ import lombok.Setter;
 public class CareerPath {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Long id;
+    private String id;
 
-    @Column(name = "name")
-    String name;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "jobtitle_id", referencedColumnName = "id")
+    private JobTitle jobTitle;
 
-    @OneToOne(mappedBy = "careerPath")
-    private User user;
+    @Column(name = "startDate")
+    private LocalDate startDate;
 
+    @Column(name = "endDate")
+    private LocalDate endDate;
+
+    @Column(name = "rating")
+    private Integer rating;
+
+    @Column(name = "company")
+    private String company;
 }
