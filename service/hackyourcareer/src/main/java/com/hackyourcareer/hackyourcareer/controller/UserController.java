@@ -10,7 +10,8 @@ import com.hackyourcareer.hackyourcareer.model.User;
 import java.util.List;
 
 
-@RestController
+@RestController()
+@RequestMapping("/users")
 public class UserController {
 
   private final UserService userService;
@@ -20,22 +21,21 @@ public class UserController {
     this.userService = userService;
   }
 
-  @GetMapping("/user/{userId}")
+  @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public User getUser(@PathVariable String id) {
-    return userService.getUserById(1L);
+  public User getOneUserById(@PathVariable Long id) {
+    return userService.getUserById(id);
   }
 
-  @GetMapping("/users")
+  @GetMapping()
   @ResponseStatus(HttpStatus.OK)
   public List<User> getUsers() {
     return userService.getAllUsers();
   }
 
-  @PostMapping("/user/new")
+  @PostMapping("/new")
   @ResponseStatus(HttpStatus.CREATED)
   public User createUser(@RequestBody User newUser) {
-    newUser.setId(1L);
     return userService.addUser(newUser);
   }
 }
