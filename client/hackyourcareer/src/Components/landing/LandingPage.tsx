@@ -1,61 +1,49 @@
 import React from "react";
-import {
-  Button,
-  Typography,
-  Card,
-  CardContent,
-  CardActions,
-} from "@mui/material";
+import { Button, Typography, Card, CardContent, CardActions, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
-import config from "../../config";
-import Navbar from "./Navbar";
 
 const LandingPage = () => {
-  return (
-    <>
-      <Navbar />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h3" gutterBottom>
-          Welcome to {config.projectName}
-        </Typography>
-        <Typography variant="h6" gutterBottom>
-          Find your perfect career path and mentor
-        </Typography>
-        <Card>
-          <CardContent>
-            <Typography color="textSecondary">
-              Join thousands of others who have discovered their ideal career
-              with us.
+    const theme = useTheme();
+
+    return (
+        <div style={{
+            padding: theme.spacing(4),
+            backgroundColor: theme.palette.background.default,
+            height: "100vh", // Full view height
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center"
+        }}>
+            <Typography variant="h3" color="primary" gutterBottom>
+                Welcome to HackYourCareer
             </Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              component={Link}
-              to="/signup"
-              variant="contained"
-              color="primary"
-            >
-              Register Now
+            <Typography variant="h6" color="textSecondary" gutterBottom>
+                Find your perfect career path and mentor
+            </Typography>
+            <Card sx={{ maxWidth: 345, mt: 2 }}>
+                <CardContent>
+                    <Typography variant="body2" color="textSecondary">
+                        Join thousands of others who have discovered their ideal career with us.
+                    </Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: "space-between" }}>
+                    <Button component={Link} to="/signup" variant="contained" color="primary">
+                        Register Now
+                    </Button>
+                    <Button component={Link} to="/login" variant="outlined" color="primary">
+                        Login
+                    </Button>
+                </CardActions>
+            </Card>
+            <Typography variant="h6" color="textSecondary" sx={{ mt: 8 }}>
+                Not sure what would be best for you?
+            </Typography>
+            <Button component={Link} to="/test" variant="contained" color="primary" sx={{ mt: 1 }}>
+                Take the Career Test
             </Button>
-            <Button
-              component={Link}
-              to="/test"
-              variant="outlined"
-              color="primary"
-            >
-              Take the Career Test
-            </Button>
-          </CardActions>
-        </Card>
-      </div>
-    </>
-  );
+        </div>
+    );
 };
 
 export default LandingPage;
