@@ -1,152 +1,138 @@
 import React, { useState } from 'react';
-import { Stepper, Step, StepLabel, Button, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Snackbar } from '@mui/material';
-import { quizData } from './quizData';
-import ResultItem from "../../results/ResultsItem"; // Import your quiz data
+import {
+    Stepper, Step, StepLabel, Button, Typography, FormControl,
+    FormLabel, RadioGroup, FormControlLabel, Radio, Snackbar
+} from '@mui/material';
+import { quizData } from './quizData'; // Ensure this import works as expected
 import { useNavigate } from 'react-router-dom';
 
-type Scores = {
+interface Scores {
     developer: number;
     tester: number;
     projectManager: number;
+}
+const titles: { [key in keyof Scores]: string } = {
+    developer: "Software Developer",
+    tester: "QA",
+    projectManager: "Project Manager"
 };
 
-type CareerMapping = {
-    [key: string]: string;  // Allowing any string as a key, which returns a string
-};
-
-const descriptions = {
+const descriptions: { [key in keyof Scores]: string } = {
     developer: "Handles complex back-end tasks, coding, and system design.",
     tester: "Ensures the quality of applications through rigorous testing.",
     projectManager: "Manages project timelines, resources, and team coordination."
 };
 
-type CareerTestProps = {
-    onCompletion(results: ResultItem[]): void
+interface ResultItem {
+    title: string;
+    percentage: number;
+    description: string;
 }
 
+type CareerTestProps = {
+    onCompletion: (results: ResultItem[]) => void;
+}
 
-const CareerTest = ({ onCompletion }: CareerTestProps) => {
-    const navigate = useNavigate(); // Use navigate function for routing
+const CareerTest: React.FC<CareerTestProps> = ({ onCompletion }) => {
+    const navigate = useNavigate();
     const [activeStep, setActiveStep] = useState(0);
-    const [answers, setAnswers] = useState<any>({});
+    const [answers, setAnswers] = useState<{ [questionId: number]: string }>({});
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
-    const determineCareerPath = (scores: Scores) => {
-        const careerMapping: CareerMapping = {
-            developer: "Software Developer",
-            tester: "Quality Assurance Tester",
-            projectManager: "Project Manager"
-        };
-
-        // Convert score object into a sorted list of careers based on scores
-        const sortedCareers = Object.keys(scores).map(key => {
-            const careerKey = key as keyof typeof careerMapping;  // Assert that the key exists in careerMapping
-            const scoreKey = key as keyof typeof scores;  // Assert that the key exists in scores
-            return {
-                career: careerMapping[careerKey],
-                score: scores[scoreKey]
-            };
-        }).sort((a, b) => b.score - a.score);
-
-        // Suggest the top careers
-        const topCareers = sortedCareers.slice(0, 3);
-        console.log('Recommended Career Paths:', topCareers.map(career => career.career));
-        return topCareers;
-    };
-
-
     const handleNext = () => {
-        // First, check if the current question has been answered
         if (answers[quizData.questions[activeStep].id] === undefined) {
             setOpenSnackbar(true);
-            return; // Stop the function if no answer is provided
+            return;
         }
 
-        // Then, check if this is the last question
         if (activeStep === quizData.questions.length - 1) {
-            // If it's the last question, compute scores and handle completion
-            const finalResults = computeScore(answers); // Ensure computeScore uses the current answers
-            onCompletion(finalResults); // Handle the completion (e.g., update state, navigate)
-            navigate('/results'); // Navigate to the results page
+            const finalResults = computeScore(answers);
+            onCompletion(finalResults);
+            navigate('/results');
         } else {
-            // If it's not the last question, simply go to the next one
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setActiveStep(prevActiveStep => prevActiveStep + 1);
         }
     };
 
-
-
     const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        if (activeStep > 0) {
+            setActiveStep(prevActiveStep => prevActiveStep - 1);
+        }
     };
 
     const handleRadioChange = (questionId: number, value: string) => {
-        setAnswers({
-            ...answers,
+        setAnswers(prev => ({
+            ...prev,
             [questionId]: value
-        });
-        if (openSnackbar) setOpenSnackbar(false); // Close the snackbar if it's open
+        }));
+        if (openSnackbar) setOpenSnackbar(false);
     };
 
-    const computeScore = (answers: any): ResultItem[] => {
-        const scores: Scores = quizData.questions.reduce((acc: Scores, question) => {
+    const computeScore = (answers: { [questionId: number]: string }): ResultItem[] => {
+        let scores: Scores = { developer: 0, tester: 0, projectManager: 0 };
+        quizData.questions.forEach(question => {
             const answer = answers[question.id];
             const selectedOption = question.options.find(option => option.value === answer);
             if (selectedOption) {
-                Object.keys(selectedOption.score).forEach((key: string) => {
-                    const scoreKey = key as keyof Scores;  // Ensure the key is valid for Scores
-                    acc[scoreKey] = (acc[scoreKey] || 0) + selectedOption.score[scoreKey];
+                Object.keys(selectedOption.score).forEach(key => {
+                    const role = key as keyof Scores;
+                    scores[role] += selectedOption.score[role];
                 });
             }
-            return acc;
-        }, { developer: 0, tester: 0, projectManager: 0 } as Scores);
+        });
 
-        // Convert Scores to ResultItems
-        return Object.entries(scores).map(([key, value]) => ({
-            title: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize the title
-            percentage: value, // This could be scaled/normalized based on some criteria
-            description: descriptions[key as keyof typeof descriptions]
-        }));
+        // Determine the highest possible score to scale the results
+        const maxScore = Math.max(...Object.values(scores));
+
+        // Adjust scores to range from 60 to 100
+        return Object.keys(scores).map(key => {
+            const role = key as keyof Scores;
+            // Scale scores to range from 60 to 100
+            let scaledScore = (scores[role] / maxScore) * 50 + 50; // Scaling factor of 40 and shift of 60
+            scaledScore = Math.min(scaledScore, 100); // Ensure score does not exceed 100%
+            return {
+                title: titles[role], // Assuming titles is defined
+                percentage: Math.round(scaledScore), // Round to nearest whole number
+                description: descriptions[role] // Assuming descriptions is defined
+            };
+        }).sort((a, b) => b.percentage - a.percentage);
     };
 
     return (
-        <div>
-            <Stepper activeStep={activeStep} alternativeLabel>
-                {quizData.questions.map((question) => (
-                    <Step key={question.id}>
-                        <StepLabel>{question.text}</StepLabel>
+        <div style={{ padding: '2rem', backgroundColor: '#f4f6f8', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography variant="h4" align="center" sx={{ mb: 4 }}>
+                Let's see what suits you
+            </Typography>
+            <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 3 }}>
+                {quizData.questions.map((_, index) => (
+                    <Step key={index}>
+                        <StepLabel>{`Question ${index + 1}`}</StepLabel>
                     </Step>
                 ))}
             </Stepper>
+
             <div>
-                {activeStep === quizData.questions.length ? (
-                    <div>
-                        <Typography>All steps completed - you're finished</Typography>
-                        <Button href="/results">See Results</Button>
-                    </div>
-                ) : (
-                    <div>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend">{quizData.questions[activeStep].text}</FormLabel>
-                            <RadioGroup
-                                name={`question_${quizData.questions[activeStep].id}`}
-                                value={answers[quizData.questions[activeStep].id] || ''}
-                                onChange={(e) => handleRadioChange(quizData.questions[activeStep].id, e.target.value)}
-                            >
-                                {quizData.questions[activeStep].options.map((option) => (
-                                    <FormControlLabel key={option.value} value={option.value} control={<Radio />} label={option.text} />
-                                ))}
-                            </RadioGroup>
-                        </FormControl>
-                        <Button disabled={activeStep === 0} onClick={handleBack}>
-                            Back
-                        </Button>
-                        <Button variant="contained" color="primary" onClick={handleNext}>
-                            {activeStep === quizData.questions.length - 1 ? 'Finish' : 'Next'}
-                        </Button>
-                    </div>
-                )}
+                <FormControl component="fieldset" fullWidth>
+                    <FormLabel component="legend">{quizData.questions[activeStep].text}</FormLabel>
+                    <RadioGroup
+                        name={`question_${quizData.questions[activeStep].id}`}
+                        value={answers[quizData.questions[activeStep].id] || ''}
+                        onChange={(e) => handleRadioChange(quizData.questions[activeStep].id, e.target.value)}
+                    >
+                        {quizData.questions[activeStep].options.map((option, index) => (
+                            <FormControlLabel key={index} value={option.value} control={<Radio />} label={option.text} />
+                        ))}
+                    </RadioGroup>
+                </FormControl>
             </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', gap: '10px' }}>
+                <Button onClick={handleBack} disabled={activeStep === 0} variant="outlined">Back</Button>
+                <Button onClick={handleNext} variant="contained" color="primary">
+                    {activeStep === quizData.questions.length - 1 ? 'Finish' : 'Next'}
+                </Button>
+            </div>
+
             <Snackbar
                 open={openSnackbar}
                 autoHideDuration={6000}
