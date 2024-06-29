@@ -3,7 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -11,10 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import MenuItem from "@mui/material/MenuItem"; // Import MenuItem for select
-import InputLabel from "@mui/material/InputLabel"; // Import InputLabel
-import FormControl from "@mui/material/FormControl"; // Import FormControl
-import Select from "@mui/material/Select"; // Import Select
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 
 function Copyright(props: any) {
   return (
@@ -43,18 +39,18 @@ const defaultTheme = createTheme({
 });
 
 export default function Login() {
+  const navigate = useNavigate(); // Use the useNavigate hook
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
       email: data.get("email"),
       password: data.get("password"),
-      gender: data.get("gender"),
-      age: data.get("age"),
-      cv: data.get("cv"),
     });
+
+    // Navigate to the /profile endpoint after successful login
+    navigate("/profile");
   };
 
   return (
