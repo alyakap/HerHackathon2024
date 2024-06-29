@@ -1,5 +1,7 @@
 package com.hackyourcareer.hackyourcareer.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +20,9 @@ public class CareerPath {
     @Column(name = "id")
     private String id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "jobtitle_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"id"})
     private JobTitle jobTitle;
 
     @Column(name = "startDate")
@@ -33,4 +36,9 @@ public class CareerPath {
 
     @Column(name = "company")
     private String company;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonBackReference
+    private User user;
 }
