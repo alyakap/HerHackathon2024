@@ -3,7 +3,43 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./ProfileStyles.css";
 import axios from "axios";
-type MockUserData = {
+
+type Preference = {
+  id: string;
+  name: string;
+};
+
+type Skill = {
+  id: string;
+  name: string;
+};
+
+type Interest = {
+  id: string;
+  name: string;
+};
+
+type JobTitle = {
+  id: string;
+  name: string;
+};
+
+type Personality = {
+  id: string;
+  name: string;
+  description: string;
+};
+
+type CareerPath = {
+  id: string;
+  jobTitle: JobTitle;
+  startDate: string;
+  endDate: string;
+  rating: number;
+  company: string;
+};
+
+type UserData = {
   id: string;
   username: string;
   email: string;
@@ -13,43 +49,17 @@ type MockUserData = {
   gender: "FEMALE" | "MALE";
   isMentor: boolean;
   isMentee: boolean;
-  preferencesSet: {
-    id: string;
-    name: string;
-  }[];
-  skillsSet: {
-    id: string;
-    name: string;
-  }[];
-  interestsSet: {
-    id: string;
-    name: string;
-  }[];
-  jobtitle: {
-    id: string;
-    name: string;
-  };
-  personality: {
-    id: string;
-    name: string;
-    description: string;
-  };
-  careerPath: {
-    id: string;
-    jobTitle: {
-      id: string;
-      name: string;
-    };
-    startDate: string;
-    endDate: string;
-    rating: number;
-    company: string;
-  };
+  preferencesSet: Preference[];
+  skillsSet: Skill[];
+  interestsSet: Interest[];
+  jobtitle: JobTitle;
+  personality: Personality;
+  careerPath: CareerPath;
 };
 
 function Profile() {
   const [activeTab, setActiveTab] = useState("profile");
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
     axios
@@ -61,80 +71,9 @@ function Profile() {
       .catch((error) => console.error("Error fetching user data:", error));
   }, []);
 
-  const mockUserData = {
-    "id": "1",
-    "username": "mentor1",
-    "email": "email@example.com",
-    "firstname": "Ada",
-    "lastname": "Lovelace",
-    "age": 43,
-    "gender": "FEMALE",
-    "isMentor": true,
-    "isMentee": false,
-    "preferencesSet": [
-      {
-        "id": "P013",
-        "name": "performance feedback",
-      },
-      {
-        "id": "P014",
-        "name": "innovation focus",
-      },
-      {
-        "id": "P015",
-        "name": "workplace diversity",
-      },
-    ],
-    "skillsSet": [
-      {
-        "id": "S013",
-        "name": "Angular",
-      },
-      {
-        "id": "S011",
-        "name": "C#",
-      },
-      {
-        "id": "S016",
-        "name": "AWS",
-      },
-    ],
-    "interestsSet": [
-      {
-        "id": "I001",
-        "name": "Reading industry-related articles",
-      },
-      {
-        "id": "I010",
-        "name": "Building a personal brand",
-      },
-      {
-        "id": "I015",
-        "name": "Engaging in thought leadership",
-      },
-    ],
-    "jobtitle": {
-      "id": "J003",
-      "name": "IT Support Specialist",
-    },
-    "personality": {
-      "id": "ESTP",
-      "name": "The Persuader",
-      "description":
-        "Out-going and dramatic, they enjoy spending time with others and focusing on the here-and-now.",
-    },
-    "careerPath": {
-      "id": "CP001",
-      "jobTitle": {
-        "id": "J003",
-        "name": "IT Support Specialist",
-      },
-      "startDate": "2022-01-01",
-      "endDate": "2023-01-01",
-      "rating": 5,
-      "company": "TechCorp",
-    },
-  };
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -169,10 +108,10 @@ function Profile() {
                     <div className="ms-3">
                       <div>
                         <h3 className="card-title mb-2">
-                          {mockUserData.firstname} {mockUserData.lastname}
+                          {userData.firstname} {userData.lastname}
                         </h3>
                         <p className="mb-0 text-muted">
-                          {mockUserData.jobtitle.name}
+                          {userData.jobtitle?.name}
                         </p>
                       </div>
                     </div>
@@ -239,22 +178,20 @@ function Profile() {
                       <h5>Experience</h5>
                       <ul>
                         <li>
-                          <strong>
-                            {mockUserData.careerPath.jobTitle.name}
-                          </strong>{" "}
-                          at {mockUserData.careerPath.company}
+                          <strong>{userData.careerPath?.jobTitle?.name}</strong>{" "}
+                          at {userData.careerPath?.company}
                           <br />
                           <em>
-                            {mockUserData.careerPath.startDate} -{" "}
-                            {mockUserData.careerPath.endDate}
+                            {userData.careerPath?.startDate} -{" "}
+                            {userData.careerPath?.endDate}
                           </em>
-                          <p>Rating: {mockUserData.careerPath.rating}</p>
+                          <p>Rating: {userData.careerPath?.rating}</p>
                         </li>
                       </ul>
 
                       <h5>Preferences</h5>
                       <ul>
-                        {mockUserData.preferencesSet.map((preference) => (
+                        {userData.preferencesSet?.map((preference) => (
                           <li key={preference.id}>
                             <strong>{preference.name}</strong>
                           </li>
@@ -306,7 +243,7 @@ function Profile() {
                 <div className="pt-2">
                   <h4 className="card-title mb-4">My Skills</h4>
                   <div className="d-flex gap-2 flex-wrap">
-                    {mockUserData.skillsSet.map((skill) => (
+                    {userData.skillsSet?.map((skill) => (
                       <span
                         key={skill.id}
                         className="badge badge-soft-secondary p-2"
@@ -324,8 +261,8 @@ function Profile() {
                   <h4 className="card-title mb-4">Interests</h4>
                   <div className="table-responsive">
                     <p>
-                      {mockUserData.interestsSet
-                        .map((interest) => interest.name)
+                      {userData.interestsSet
+                        ?.map((interest) => interest.name)
                         .join(", ")}
                     </p>
                   </div>
@@ -338,8 +275,8 @@ function Profile() {
                   <h4 className="card-title mb-4">Personality</h4>
                   <div className="table-responsive">
                     <p>
-                      <strong>{mockUserData.personality.name}:</strong>{" "}
-                      {mockUserData.personality.description}
+                      <strong>{userData.personality?.name}:</strong>{" "}
+                      {userData.personality?.description}
                     </p>
                   </div>
                 </div>
