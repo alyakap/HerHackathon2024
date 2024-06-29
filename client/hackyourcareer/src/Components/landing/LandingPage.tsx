@@ -15,7 +15,7 @@ const LandingPage = () => {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button component={Link} to="/register" variant="contained" color="primary">Register Now</Button>
+                    <Button component={Link} to="/signin" variant="contained" color="primary">Register Now</Button>
                     <Button component={Link} to="/test" variant="outlined" color="primary">Take the Career Test</Button>
                 </CardActions>
             </Card>
