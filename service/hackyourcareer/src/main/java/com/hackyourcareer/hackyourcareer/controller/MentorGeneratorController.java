@@ -21,7 +21,6 @@ public class MentorGeneratorController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-
     public List<User> generateMentors(@PathVariable Long id) {
         return userService.generateMentorsForUser(id);
     }
