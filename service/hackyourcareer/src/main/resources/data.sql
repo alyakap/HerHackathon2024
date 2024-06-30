@@ -166,9 +166,9 @@ VALUES
 
 INSERT INTO users (id, username, email, firstname, lastname, age, gender, is_mentor, is_mentee, jobtitle_id, personality_id, location, avatar_url)
 VALUES
-('1', 'mentee1', 'email@email.com', 'Anna', 'Melson', 33, 'FEMALE', false, true, 'J022', 'ESTP', 'USA', 'https://earthlab.colorado.edu/sites/default/files/media/image/Ada_Lovelace_Chalon_portrait.jpg'),
-('2', 'mentor1', 'email@email.com', 'Ada', 'Lovelace', 43, 'FEMALE', true, false, 'J002', 'ENFJ', 'Frankfurt, Germany', 'https://mim.p7s1.io/pis/ld/c97ezChLCVyZ-c1vEwXZAanB-DJ78rnq2V2gRWTHzVV6NywNWMSJCEGmZ4YSENP-WRL0b9lo2z_IfR_W_NB3xHAXlZaTzYAhOvOGK9Bc53VQ3BsxRJ3t03eXpLyoTK22rB5pwWWZr68/profile:original?rect=224%2C0%2C576%2C576&w=400'),
-('3', 'mentor2', 'email@email.com', 'Hedy', 'Lamarr', 33, 'FEMALE', true, false, 'J002', 'ESTP', 'Frankfurt, Germany', 'https://www.physics.wisc.edu/wp-content/uploads/2021/12/Mae-Saul-profile-400x400.jpg'),
+('1', 'mentee1', 'email@email.com', 'Anna', 'Melson', 33, 'FEMALE', false, true, 'J022', 'ESTP', 'USA', 'https://www.physics.wisc.edu/wp-content/uploads/2021/12/Mae-Saul-profile-400x400.jpg'),
+('2', 'mentor1', 'email@email.com', 'Ada', 'Lovelace', 43, 'FEMALE', true, false, 'J002', 'ENFJ', 'Frankfurt, Germany', 'https://earthlab.colorado.edu/sites/default/files/media/image/Ada_Lovelace_Chalon_portrait.jpg'),
+('3', 'mentor2', 'email@email.com', 'Hedy', 'Lamarr', 33, 'FEMALE', true, false, 'J002', 'ESTP', 'Frankfurt, Germany', 'https://mim.p7s1.io/pis/ld/c97ezChLCVyZ-c1vEwXZAanB-DJ78rnq2V2gRWTHzVV6NywNWMSJCEGmZ4YSENP-WRL0b9lo2z_IfR_W_NB3xHAXlZaTzYAhOvOGK9Bc53VQ3BsxRJ3t03eXpLyoTK22rB5pwWWZr68/profile:original?rect=224%2C0%2C576%2C576&w=400'),
 ('4', 'mentee2', 'email@email.com', 'John', 'Doe', 28, 'MALE', false, true, 'J020', 'ENFP', 'Canada', 'https://example.com/avatar.jpg'),
 ('5', 'mentee3', 'email@email.com', 'Emily', 'Smith', 35, 'FEMALE', false, true, 'J010', 'INTJ', 'Australia', 'https://example.com/avatar.jpg'),
 ('6', 'mentor3', 'email@email.com', 'Albert', 'Einstein', 50, 'MALE', true, false, 'J019', 'INTP', 'USA', 'https://example.com/avatar.jpg'),
