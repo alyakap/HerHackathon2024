@@ -66,9 +66,28 @@ type UserData = {
   }[];
 };
 
+type MentorData = {
+  username: string;
+  firstname: string;
+  lastname: string;
+  location: string;
+  avatarUrl: string;
+  gender: "FEMALE" | "MALE";
+  jobtitle: {
+    id: string;
+    name: string;
+  };
+  languagesList: {
+    id: string;
+    name: string;
+  }[];
+}[];
+
 function Profile() {
   const [activeTab, setActiveTab] = useState("profile");
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [mentorData, setMentorData] = useState<MentorData | null>(null);
+  const [loadingMentors, setLoadingMentors] = useState(false);
 
   useEffect(() => {
     axios
@@ -83,6 +102,25 @@ function Profile() {
       })
       .catch((error) => console.error("Error fetching user data:", error));
   }, []);
+
+  const handleSearchClick = () => {
+    setLoadingMentors(true);
+    axios
+      .get("http://localhost:8080/generateMentor/1", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setMentorData(response.data);
+        setLoadingMentors(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching mentor data:", error);
+        setLoadingMentors(false);
+      });
+  };
 
   if (!userData) {
     return <div>Loading...</div>;
@@ -110,7 +148,7 @@ function Profile() {
                   <div className="col-md-4">
                     <div className="text-center border-end">
                       <img
-                        src={userData?.avatarUrl}
+                        src={userData.avatarUrl}
                         className="img-fluid avatar-xxl rounded-circle"
                         alt=""
                       />
@@ -120,10 +158,10 @@ function Profile() {
                     <div className="ms-3">
                       <div>
                         <h3 className="card-title mb-2">
-                          {userData?.firstname} {userData?.lastname}
+                          {userData.firstname} {userData.lastname}
                         </h3>
                         <p className="mb-0 text-muted">
-                          {userData?.jobtitle?.name}
+                          {userData.jobtitle.name}
                         </p>
                       </div>
                     </div>
@@ -189,7 +227,7 @@ function Profile() {
                     <div className="row">
                       <h5>Experience</h5>
                       <ul>
-                        {userData?.careerPaths?.map((path) => (
+                        {userData.careerPaths.map((path) => (
                           <li key={path.id}>
                             <strong>{path.jobTitle.name}</strong> at{" "}
                             {path.company}
@@ -204,7 +242,7 @@ function Profile() {
 
                       <h5>Preferences</h5>
                       <ul>
-                        {userData?.preferencesSet?.map((preference) => (
+                        {userData.preferencesSet.map((preference) => (
                           <li key={preference.id}>
                             <strong>{preference.name}</strong>
                           </li>
@@ -223,47 +261,53 @@ function Profile() {
                   <div className="tab-pane active show" role="tabpanel">
                     <h4 className="card-title mb-4">Mentor Suggestions</h4>
                     <div className="row">
-                      <button type="button" className="btn btn-primary mb-4">
+                      <button
+                        type="button"
+                        className="btn btn-primary mb-4"
+                        onClick={handleSearchClick}
+                      >
                         <i className="fa-solid fa-user text-white mx-4"></i>
                         &nbsp;Search
                       </button>
-                      {userData?.mentorsSet?.map((mentor) => (
-                        <div className="card" key={mentor.username}>
-                          <div className="card-body pb-4">
-                            <div className="row align-items-center">
-                              <div className="col-md-2">
-                                <div className="text-center border-end">
-                                  <img
-                                    src={mentor.avatarUrl}
-                                    className="img-fluid rounded-circle"
-                                    alt=""
-                                    style={{ width: "80px" }}
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-md-9">
-                                <div className="ms-3">
-                                  <div>
-                                    <h4 className="card-title mb-2">
-                                      {mentor.firstname} {mentor.lastname}
-                                    </h4>
-                                    <p className="mb-0 text-muted">
-                                      {mentor.jobtitle.name}
-                                    </p>
+                      {loadingMentors && <div>Loading mentors...</div>}
+                      {mentorData &&
+                        mentorData.map((mentor) => (
+                          <div className="card" key={mentor.username}>
+                            <div className="card-body pb-4">
+                              <div className="row align-items-center">
+                                <div className="col-md-2">
+                                  <div className="text-center border-end">
+                                    <img
+                                      src={mentor.avatarUrl}
+                                      className="img-fluid rounded-circle"
+                                      alt=""
+                                      style={{ width: "80px" }}
+                                    />
                                   </div>
                                 </div>
-                              </div>
-                              <div className="col-md-1">
-                                <div className="ms-3">
-                                  <div>
-                                    <i className="fa-solid fa-chevron-right"></i>
+                                <div className="col-md-9">
+                                  <div className="ms-3">
+                                    <div>
+                                      <h4 className="card-title mb-2">
+                                        {mentor.firstname} {mentor.lastname}
+                                      </h4>
+                                      <p className="mb-0 text-muted">
+                                        {mentor.jobtitle.name}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-md-1">
+                                  <div className="ms-3">
+                                    <div>
+                                      <i className="fa-solid fa-chevron-right"></i>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   </div>
                 )}
@@ -281,7 +325,7 @@ function Profile() {
                       <tbody>
                         <tr>
                           <th scope="row">Location</th>
-                          <td>{userData?.location}</td>
+                          <td>{userData.location}</td>
                         </tr>
                         <tr>
                           <th scope="row">Tel</th>
@@ -298,7 +342,7 @@ function Profile() {
                 <div className="pt-2">
                   <h4 className="card-title mb-4">My Skills</h4>
                   <div className="d-flex gap-2 flex-wrap">
-                    {userData?.skillsSet?.map((skill) => (
+                    {userData.skillsSet.map((skill) => (
                       <span
                         key={skill.id}
                         className="badge badge-soft-secondary p-2"
@@ -316,8 +360,8 @@ function Profile() {
                   <h4 className="card-title mb-4">Interests</h4>
                   <div className="table-responsive">
                     <p>
-                      {userData?.interestsSet
-                        ?.map((interest) => interest.name)
+                      {userData.interestsSet
+                        .map((interest) => interest.name)
                         .join(", ")}
                     </p>
                   </div>
@@ -330,8 +374,8 @@ function Profile() {
                   <h4 className="card-title mb-4">Personality</h4>
                   <div className="table-responsive">
                     <p>
-                      <strong>{userData?.personality?.name}:</strong>{" "}
-                      {userData?.personality?.description}
+                      <strong>{userData.personality.name}:</strong>{" "}
+                      {userData.personality.description}
                     </p>
                   </div>
                 </div>
